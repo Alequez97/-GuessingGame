@@ -1,0 +1,23 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Guessing game</h1>
+
+    <div class="container col-6">
+
+        <form method="get" action="/game">
+
+            <div class="container">
+                <input type="text" class="form-control mt-3" name="name" id="name" placeholder="Name" required>
+                <input type="submit" class="btn btn-info mt-3" value="Start game" />
+            </div>
+
+        </form>
+    </div>
+
+
+</div>
