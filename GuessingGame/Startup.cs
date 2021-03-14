@@ -1,3 +1,5 @@
+using GuessingGame.Database;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -23,6 +25,8 @@ namespace GuessingGame
         {
             services.AddDistributedMemoryCache();
 
+            services.AddDbContext<GuessGameDbContext>(opt => opt.UseInMemoryDatabase(databaseName: "GuessGame"));
+
             services.AddSession(options => 
             {
                 //options.IdleTimeout = TimeSpan.FromSeconds(10);
@@ -42,7 +46,6 @@ namespace GuessingGame
             });
 
             services.AddRazorPages().AddRazorRuntimeCompilation();
-            services.AddControllers();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -14,11 +14,11 @@
         {
             if (gameSession.PlayerWon)
             {
-                <h2>Congratulations, @gameSession.PlayerName! You guessed number in @gameSession.TriesLeft tries!</h2>
+                <h2>Congratulations, @gameSession.PlayerName! You guessed number in @gameSession.UsedTries tries!</h2>
                 <h3>Number was @gameSession.NumberToGuess</h3>
                 <a href="/game?name=@gameSession.PlayerName" class="btn btn-warning m-2 pl-4 pr-4 pt-2 pb-2">Play Again</a><br>
                 <a href="/" class="btn btn-info m-2 pl-5 pr-5 pt-3 pb-3">Main Menu</a><br>
-                <a href="#" class="btn btn-secondary m-2">Leaderboards</a><br>
+                <a href="/leaderboards" class="btn btn-secondary m-2">Leaderboards</a><br>
             }
             else
             {
@@ -33,7 +33,7 @@
                     <h3>The number was @gameSession.NumberToGuess</h3>
                     <a href="/game?name=@gameSession.PlayerName" class="btn btn-warning m-2 pl-4 pr-4 pt-2 pb-2">Play Again</a><br>
                     <a href="/" class="btn btn-info m-2 pl-5 pr-5 pt-3 pb-3">Main Menu</a><br>
-                    <a href="#" class="btn btn-secondary m-2">Leaderboards</a><br>
+                    <a href="/leaderboards" class="btn btn-secondary m-2">Leaderboards</a><br>
                 }
             }
         }

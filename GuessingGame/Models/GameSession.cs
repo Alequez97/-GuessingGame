@@ -27,6 +27,8 @@ namespace GuessingGame.Models
 
         public bool PlayerWon { get; set; } = false;
 
+        public int UsedTries => TriesAtStart - TriesLeft;
+
         public void Reset()
         {
             PlayerWon = false;

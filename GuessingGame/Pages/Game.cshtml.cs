@@ -34,6 +34,14 @@ namespace GuessingGame.Pages
                 {
                     CreateNewGameSession(name, number);
                 }
+                else
+                {
+                    if (gameSession.PlayerWon == true || gameSession.TriesLeft == 0)        //if player guessed number or won used all tries, reset game
+                    {
+                        gameSession.Reset();
+                        HttpContext.Session.Set<GameSession>(gameSessionName, gameSession);
+                    }
+                }
             }
         }
 
