@@ -1,4 +1,5 @@
-﻿@page 
+﻿@page
+
 @model GuessingGame.Pages.GameModel
 @using Microsoft.AspNetCore.Http;
 @inject Microsoft.AspNetCore.Antiforgery.IAntiforgery antiforgery
@@ -6,28 +7,40 @@
     var token = antiforgery.GetAndStoreTokens(HttpContext).RequestToken;
 }
 
-<h2>Hello @Model.GetGameSession().PlayerName;</h2>
-<h3>Genereated number - @Model.GetGameSession().NumberToGuess</h3>
+<div class="text-center">
+    <h2>Hello @Model.GetGameSession().PlayerName;</h2>
+    <h3>Genereated number - @Model.GetGameSession().NumberToGuess</h3>
+</div>
 
-<div>
-    <div class="form-group row">
-        <input type="number" class="form-control col-1 text-center inpts" required min="1" max="9" id="num1" name="num1">
-        <input type="number" class="form-control col-1 text-center inpts" required min="0" max="9" id="num2" name="num2">
-        <input type="number" class="form-control col-1 text-center inpts" required min="0" max="9" id="num3" name="num3">
-        <input type="number" class="form-control col-1 text-center inpts" required min="0" max="9" id="num4" name="num4">
+<div class="centered-inner-div mt-5">
+
+    <div class="d-flex centered-inner-div">
+        <div class="d-inline-block">
+            <div class="form-group row">
+                <input type="number" class="form-control col-2 text-center inpts" required maxlength="1" min="1" max="9" id="num1" name="num1">
+                <input type="number" class="form-control col-2 text-center inpts" required maxlength="1" min="0" max="9" id="num2" name="num2">
+                <input type="number" class="form-control col-2 text-center inpts" required maxlength="1" min="0" max="9" id="num3" name="num3">
+                <input type="number" class="form-control col-2 text-center inpts" required maxlength="1" min="0" max="9" id="num4" name="num4">
+            </div>
+            <div>
+                <div>
+                    <button class="btn btn-info" onclick="GetInput()">Try guess</button>
+                </div>
+            </div>
+        </div>
+        <div class="d-inline-block">
+            <h3>Your inputs:</h3>
+            <div id="input-history" class="border">
+                @foreach (var input in Model.GetGameSession().PlayerInputs)
+                {
+                    @input<br>
+                }
+            </div>
+            <h4 id="tries-left">Tries left: @Model.GetGameSession().TriesLeft</h4>
+        </div>
     </div>
-    <button class="btn btn-info" onclick="GetInput()">Try guess</button>
 
 </div>
-
-<h3>Your inputs:</h3>
-<div id="input-history">
-    @foreach(var input in Model.GetGameSession().PlayerInputs)
-    {
-        <p>@input</p>
-    }
-</div>
-<h4 id="tries-left">Tries left: @Model.GetGameSession().TriesLeft</h4>
 
 <script>
 

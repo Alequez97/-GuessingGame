@@ -71,7 +71,7 @@ body {
 }
 
 .centered-inner-div {
-    margin-left: 0 auto;
+    position: relative;
+    margin: 0 auto;
     width: 70%;
-    border: 1px solid red;
 }
