@@ -31,10 +31,15 @@
         <div class="d-inline-block">
             <h3>Your inputs:</h3>
             <div id="input-history" class="border">
-                @foreach (var input in Model.GetGameSession().PlayerInputs)
-                {
-                    @input<br>
+                @{
+                    var gameSession = Model.GetGameSession();
+                    for (int i = 0; i < gameSession.PlayerInputs.Count; i++)
+                    {
+                                <span class="pt-3 pl-3">@gameSession.PlayerInputs[i]</span> 
+                                <span class="pt-3 pl-3"><strong>M:</strong>@gameSession.GuessResults[i].CorrectMatches <strong>P:</strong>@gameSession.GuessResults[i].CorrectPositions</span><br>
+                    }
                 }
+
             </div>
             <h4 id="tries-left">Tries left: @Model.GetGameSession().TriesLeft</h4>
         </div>
@@ -69,7 +74,9 @@
             headers: { "RequestVerificationToken": "@token", },
             success: function (result) {
                 $("#tries-left").text("Tries left: " + result.triesLeft);
-                $("#input-history").append("<p>" + result.lastMove + "<p>");
+                $("#input-history").append("<span class=\"pt-3 pl-3\">" + result.lastMove + "</span>");
+                $("#input-history").append("<span class=\"pt-3 pl-3\"> <strong>M:</strong>" + result.lastGuessResult.correctMatches);
+                $('#input-history').append(" <strong>P:</strong>" + result.lastGuessResult.correctMatches + "</span><br>");
             },
             error: function (error) {
                 console.log("Error");

@@ -10,6 +10,8 @@ namespace GuessingGame.Models
 
         public string LastMove { get; set; }
 
+        public GuessResult LastGuessResult { get; set; }
+
         public int TriesLeft { get; set; }
 
     }

@@ -18,13 +18,43 @@ namespace GuessingGame.Pages
                 var gameSession = HttpContext.Session.Get<GameSession>("_GameSession");
                 gameSession.PlayerInputs.Add(input);
                 gameSession.TriesLeft--;
-                HttpContext.Session.Set<GameSession>("_GameSession", gameSession);
+                var lastGuessResult = CheckInputResult(input, gameSession.NumberToGuess, gameSession.NumberToGuess.Length);
+                gameSession.GuessResults.Add(lastGuessResult);
 
-                var response = new Response() { LastMove = input, TriesLeft = gameSession.TriesLeft };
+                HttpContext.Session.Set<GameSession>("_GameSession", gameSession);
+                var response = new Response() 
+                { 
+                    LastMove = input, 
+                    TriesLeft = gameSession.TriesLeft, 
+                    LastGuessResult = lastGuessResult 
+                };
 
                 return new JsonResult(response);
             }
             return new JsonResult(true) { StatusCode = 404 };
+        }
+
+        private GuessResult CheckInputResult(string playerInput, string numberToGuess, int numberSize)
+        {
+            int correctPositions = 0, correctMatches = 0;
+
+            for (int i = 0; i < numberSize; i++)
+            {
+
+                if (playerInput[i] == numberToGuess[i])     //Check if input number matches secret number
+                {
+                    correctPositions++;
+                }
+                else                                        //if not, than check if secret number contains that number
+                {
+                    if (numberToGuess.Contains(playerInput[i]))
+                    {
+                        correctMatches++;
+                    }
+                }
+            }
+
+            return new GuessResult { CorrectMatches = correctMatches, CorrectPositions = correctPositions };
         }
     }
 }

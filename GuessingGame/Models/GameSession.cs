@@ -19,6 +19,8 @@ namespace GuessingGame.Models
 
         public List<string> PlayerInputs { get; set; } = new List<string>();
 
+        public List<GuessResult> GuessResults { get; set; } = new List<GuessResult>();
+
         
 
     }
