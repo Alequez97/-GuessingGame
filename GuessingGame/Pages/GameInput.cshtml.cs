@@ -55,7 +55,7 @@ namespace GuessingGame.Pages
 
                 return new JsonResult(response);
             }
-            return new JsonResult(true) { StatusCode = 404 };
+            return new JsonResult(false) { StatusCode = 404 };
         }
 
         private bool SaveGameResult(string playerName, bool playerWon, int triesMade)

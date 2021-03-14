@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using GuessingGame.Database;
+using GuessingGame.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
@@ -17,11 +18,40 @@ namespace GuessingGame.Pages
             this.dbContext = dbContext;
         }
 
-        public List<GameResult> GameResults { get; private set; }
+        public Dictionary<string, UserStatsModel> LeaderboardRecords { get; private set; }
 
         public void OnGet()
         {
-            GameResults = dbContext.GameResults.ToList();
+            var gameResults = dbContext.GameResults.ToList();
+            LeaderboardRecords = ParseDatabaseRecords(gameResults);
+        }
+
+        private Dictionary<string, UserStatsModel> ParseDatabaseRecords(List<GameResult> gameResults)
+        {
+            Dictionary<string, UserStatsModel> leaderboardsDictionary = new Dictionary<string, UserStatsModel>();
+
+            foreach(var gameResult in gameResults)
+            {
+                if (leaderboardsDictionary.ContainsKey(gameResult.Username))
+                {
+                    leaderboardsDictionary[gameResult.Username].GamesPlayed++;
+                    if (gameResult.GameIsWon) leaderboardsDictionary[gameResult.Username].GamesWon++;
+                    leaderboardsDictionary[gameResult.Username].TotalTries += gameResult.TriesMade;
+                }
+                else
+                {
+                    var userStats = new UserStatsModel()
+                    {
+                        GamesPlayed = 1,
+                        GamesWon = gameResult.GameIsWon ? 1 : 0,
+                        TotalTries = gameResult.TriesMade
+                    };
+                    leaderboardsDictionary.Add(gameResult.Username, userStats);
+                }
+            }
+
+            return leaderboardsDictionary;
+
         }
     }
 }

@@ -1,29 +1,34 @@
 ﻿@page
 @model GuessingGame.Pages.LeaderboardsModel
 @{
+    int index = 1;
 }
 
-<h1>Total rows in database - @Model.GameResults.Count</h1>
 
 <table class="table table-striped">
     <thead class="thead-dark">
         <tr>
-            <th scope="col"></th>
+            <th scope="col">Position</th>
             <th scope="col">Username</th>
             <th scope="col">Games won</th>
             <th scope="col">Games played</th>
             <th scope="col">% of games wons</th>
-            <th scope="col">Average tries</th>
+            <th scope="col">Average tries count</th>
         </tr>
     </thead>
-    <tbody>
-        <tr>
-            <th scope="row">1</th>
-            <td>Mark</td>
-            <td>46</td>
-            <td>100</td>
-            <td>46%</td>
-            <td>5.3</td>
-        </tr>
-    </tbody>
+
+    @foreach (var record in Model.LeaderboardRecords)
+    {
+        <tbody>
+            <tr>
+                <th scope="row">@index @{index++;}</th>
+                <td>@record.Key</td>
+                <td>@record.Value.GamesWon</td>
+                <td>@record.Value.GamesPlayed</td>
+                <td>@record.Value.PrecentOfWinnigGames.ToString("0.##") %</td>
+                <td>@record.Value.AverageTryCount.ToString("0.##")</td>
+            </tr>
+        </tbody>
+    }
+
 </table>
