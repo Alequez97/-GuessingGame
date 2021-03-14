@@ -23,6 +23,7 @@ namespace GuessingGame.Pages
         public void OnGet(string minGames)
         {
             int minGamesCount = (minGames == null) ? 0 : Convert.ToInt32(minGames);
+            dbContext.Database.EnsureCreated();
             var gameResults = dbContext.GameResults.ToList();
             LeaderboardRecords = ParseDatabaseRecords(gameResults, minGamesCount);
         }
