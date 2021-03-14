@@ -35,8 +35,8 @@
                     var gameSession = Model.GetGameSession();
                     for (int i = 0; i < gameSession.PlayerInputs.Count; i++)
                     {
-                                <span class="pt-3 pl-3">@gameSession.PlayerInputs[i]</span> 
-                                <span class="pt-3 pl-3"><strong>M:</strong>@gameSession.GuessResults[i].CorrectMatches <strong>P:</strong>@gameSession.GuessResults[i].CorrectPositions</span><br>
+                        <span class="pt-3 pl-3">@gameSession.PlayerInputs[i]</span>
+                        <span class="pt-3 pl-3"><strong>M:</strong>@gameSession.GuessResults[i].CorrectMatches <strong>P:</strong>@gameSession.GuessResults[i].CorrectPositions</span><br>
                     }
                 }
 
@@ -73,10 +73,17 @@
             data: dataValue,
             headers: { "RequestVerificationToken": "@token", },
             success: function (result) {
-                $("#tries-left").text("Tries left: " + result.triesLeft);
-                $("#input-history").append("<span class=\"pt-3 pl-3\">" + result.lastMove + "</span>");
-                $("#input-history").append("<span class=\"pt-3 pl-3\"> <strong>M:</strong>" + result.lastGuessResult.correctMatches);
-                $('#input-history').append(" <strong>P:</strong>" + result.lastGuessResult.correctMatches + "</span><br>");
+                console.log(result);
+                if (result.playerWon || result.triesLeft <= 0) {
+                    window.location.href = "/gameover";
+                }
+                else
+                {
+                    $("#tries-left").text("Tries left: " + result.triesLeft);
+                    $("#input-history").append("<span class=\"pt-3 pl-3\">" + result.lastMove + "</span>");
+                    $("#input-history").append("<span class=\"pt-3 pl-3\"> <strong>M:</strong>" + result.lastGuessResult.correctMatches);
+                    $('#input-history').append(" <strong>P:</strong>" + result.lastGuessResult.correctPositions + "</span><br>");
+                }
             },
             error: function (error) {
                 console.log("Error");

@@ -1,0 +1,41 @@
+﻿@page
+@model GuessingGame.Pages.GameOverModel
+@{
+}
+
+<div class="text-center">
+    @{
+        var gameSession = Model.GetGameSession();
+        if (gameSession == null)
+        {
+            <h1>Of course without game no loses, but go back to start, type your name and try to play!</h1>
+        }
+        else
+        {
+            if (gameSession.PlayerWon)
+            {
+                <h2>Congratulations, @gameSession.PlayerName! You guessed number in @gameSession.TriesLeft tries!</h2>
+                <h3>Number was @gameSession.NumberToGuess</h3>
+                <a href="/game?name=@gameSession.PlayerName" class="btn btn-warning m-2 pl-4 pr-4 pt-2 pb-2">Play Again</a><br>
+                <a href="/" class="btn btn-info m-2 pl-5 pr-5 pt-3 pb-3">Main Menu</a><br>
+                <a href="#" class="btn btn-secondary m-2">Leaderboards</a><br>
+            }
+            else
+            {
+                if (gameSession.TriesLeft > 0)
+                {
+                    <h2>@gameSession.PlayerName, game not over yet! You have @gameSession.TriesLeft tries to guess number! Go back and try!</h2>
+                    <a href="/game?name=@gameSession.PlayerName" class="btn btn-warning m-2 pl-4 pr-4 pt-2 pb-2">Back to game</a><br>
+                }
+                else
+                {
+                    <h2>Game over, @gameSession.PlayerName :(</h2>
+                    <h3>The number was @gameSession.NumberToGuess</h3>
+                    <a href="/game?name=@gameSession.PlayerName" class="btn btn-warning m-2 pl-4 pr-4 pt-2 pb-2">Play Again</a><br>
+                    <a href="/" class="btn btn-info m-2 pl-5 pr-5 pt-3 pb-3">Main Menu</a><br>
+                    <a href="#" class="btn btn-secondary m-2">Leaderboards</a><br>
+                }
+            }
+        }
+    }
+</div>

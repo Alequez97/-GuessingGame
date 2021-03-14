@@ -19,6 +19,9 @@ namespace GuessingGame.Pages
                 gameSession.PlayerInputs.Add(input);
                 gameSession.TriesLeft--;
                 var lastGuessResult = CheckInputResult(input, gameSession.NumberToGuess, gameSession.NumberToGuess.Length);
+
+                if (lastGuessResult.CorrectPositions == GameSession.NumberSize) gameSession.PlayerWon = true;
+
                 gameSession.GuessResults.Add(lastGuessResult);
 
                 HttpContext.Session.Set<GameSession>("_GameSession", gameSession);
@@ -26,7 +29,8 @@ namespace GuessingGame.Pages
                 { 
                     LastMove = input, 
                     TriesLeft = gameSession.TriesLeft, 
-                    LastGuessResult = lastGuessResult 
+                    LastGuessResult = lastGuessResult,
+                    PlayerWon = gameSession.PlayerWon,
                 };
 
                 return new JsonResult(response);

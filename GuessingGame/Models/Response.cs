@@ -14,5 +14,7 @@ namespace GuessingGame.Models
 
         public int TriesLeft { get; set; }
 
+        public bool PlayerWon { get; set; }
+
     }
 }
