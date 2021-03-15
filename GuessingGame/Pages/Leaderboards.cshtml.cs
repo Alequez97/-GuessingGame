@@ -18,17 +18,26 @@ namespace GuessingGame.Pages
             this.dbContext = dbContext;
         }
 
-        public Dictionary<string, UserStatsModel> LeaderboardRecords { get; private set; }
+        public List<UserStatsModel> LeaderboardRecordsList { get; set; }
 
-        public void OnGet(string minGames)
+        public void OnGet()
+        {
+            dbContext.Database.EnsureCreated();
+            var gameResults = dbContext.GameResults.ToList();
+            LeaderboardRecordsList = ParseDatabaseRecords(gameResults, 0);
+        }
+
+        public IActionResult OnGetUpdate(string minGames)
         {
             int minGamesCount = (minGames == null) ? 0 : Convert.ToInt32(minGames);
             dbContext.Database.EnsureCreated();
             var gameResults = dbContext.GameResults.ToList();
-            LeaderboardRecords = ParseDatabaseRecords(gameResults, minGamesCount);
+            LeaderboardRecordsList = ParseDatabaseRecords(gameResults, minGamesCount);
+            return new JsonResult(LeaderboardRecordsList);
+
         }
 
-        private Dictionary<string, UserStatsModel> ParseDatabaseRecords(List<GameResult> gameResults, int minGamesPlayed)
+        private List<UserStatsModel> ParseDatabaseRecords(List<GameResult> gameResults, int minGamesPlayed)
         {
             Dictionary<string, UserStatsModel> leaderboardsDictionary = new Dictionary<string, UserStatsModel>();
 
@@ -44,6 +53,7 @@ namespace GuessingGame.Pages
                 {
                     var userStats = new UserStatsModel()
                     {
+                        Username = gameResult.Username,
                         GamesPlayed = 1,
                         GamesWon = gameResult.GameIsWon ? 1 : 0,
                         TotalTries = gameResult.TriesMade
@@ -52,10 +62,10 @@ namespace GuessingGame.Pages
                 }
             }
 
-            return SortRecords(new Dictionary<string, UserStatsModel>(leaderboardsDictionary), minGamesPlayed);
+            return SortRecords(leaderboardsDictionary, minGamesPlayed);
         }
 
-        private Dictionary<string, UserStatsModel> SortRecords(Dictionary<string, UserStatsModel> leaderboardsDictionary, int minGamesPlayed)
+        private List<UserStatsModel> SortRecords(Dictionary<string, UserStatsModel> leaderboardsDictionary, int minGamesPlayed)
         {
             for (int i = 0; i < leaderboardsDictionary.Count; i++)      //remove records where user played less games than in input
             {
@@ -67,7 +77,7 @@ namespace GuessingGame.Pages
                 }
             }
 
-            Dictionary<string, UserStatsModel> newLeaderboardsDictionary = new Dictionary<string, UserStatsModel>();
+            List<UserStatsModel> newLeaderboards = new List<UserStatsModel>();
 
             string currentUsername = "";
             double currentWinRate = -1;
@@ -105,12 +115,13 @@ namespace GuessingGame.Pages
                 currentTryRate = -1;
                 index = 0;
 
-                newLeaderboardsDictionary.Add(currentTopPlayer.Key, currentTopPlayer.Value);
+                newLeaderboards.Add(currentTopPlayer.Value);
+
                 leaderboardsDictionary.Remove(currentTopPlayer.Key);
                 i--;
             }
 
-            return newLeaderboardsDictionary;
+            return newLeaderboards;
         }
     }
 }
