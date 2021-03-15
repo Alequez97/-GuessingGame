@@ -18,11 +18,12 @@
         <div class="d-inline-block">
             <form>
                 <div class="form-group row">
-                    <input type="number" class="form-control col-2 text-center inputs" required min="1" max="9" id="num1" name="num1" />
-                    <input type="number" class="form-control col-2 text-center inputs" required min="0" max="9" id="num2" name="num2" />
-                    <input type="number" class="form-control col-2 text-center inputs" required min="0" max="9" id="num3" name="num3" />
-                    <input type="number" class="form-control col-2 text-center inputs" required min="0" max="9" id="num4" name="num4" />
+                    <input type="number" class="form-control col-2 text-center inputs" min="1" max="9" id="num1" name="num1" />
+                    <input type="number" class="form-control col-2 text-center inputs" min="0" max="9" id="num2" name="num2" />
+                    <input type="number" class="form-control col-2 text-center inputs" min="0" max="9" id="num3" name="num3" />
+                    <input type="number" class="form-control col-2 text-center inputs" min="0" max="9" id="num4" name="num4" />
                 </div>
+                <span id="input-error-field" style="position:relative; bottom: 20px; right:40px; color:red;"></span>
             </form>
             <div>
                 <div>
@@ -69,13 +70,37 @@
         }
     });
 
+    function ValidateInput(number)
+    {
+        if (number < 0 || number > 9) {
+            document.getElementById("input-error-field").innerHTML = "Error. Input one digit in each field";
+            return false;
+        }
+        return true;
+    }
+
+    function containsUnique(str) {
+        return new Set(str).size == str.length;
+    }
+
     function GetInput() {
+        document.getElementById("input-error-field").innerHTML = "";
+
+
+
         var num1 = document.getElementById("num1").value;
         var num2 = document.getElementById("num2").value;
         var num3 = document.getElementById("num3").value;
         var num4 = document.getElementById("num4").value;
 
+        var validInput = ValidateInput(num1) && ValidateInput(num2) && ValidateInput(num3) && ValidateInput(num4);
+        if (validInput === false) return;
+
         var input = num1 + num2 + num3 + num4;
+        if (containsUnique(input) === false) {
+            document.getElementById("input-error-field").innerHTML = "Error. Input unique number in each field";
+            return
+        }
 
         SendInput(input);
     }

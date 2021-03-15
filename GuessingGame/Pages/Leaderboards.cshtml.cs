@@ -29,8 +29,15 @@ namespace GuessingGame.Pages
 
         public IActionResult OnGetUpdate(string minGames)
         {
-            int minGamesCount = (minGames == null) ? 0 : Convert.ToInt32(minGames);
-            dbContext.Database.EnsureCreated();
+            int minGamesCount;
+            try 
+            {
+                minGamesCount = Convert.ToInt32(minGames);
+            }
+            catch 
+            {
+                minGamesCount = 0;
+            }
             var gameResults = dbContext.GameResults.ToList();
             LeaderboardRecordsList = ParseDatabaseRecords(gameResults, minGamesCount);
             return new JsonResult(LeaderboardRecordsList);

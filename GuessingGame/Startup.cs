@@ -27,7 +27,7 @@ namespace GuessingGame
 
             services.AddDbContext<GuessGameDbContext>(opt => opt.UseInMemoryDatabase(databaseName: "GuessGame"));
 
-            services.AddSession(options => 
+            services.AddSession(options =>
             {
                 //options.IdleTimeout = TimeSpan.FromSeconds(10);
                 options.Cookie.HttpOnly = true;
@@ -66,6 +66,11 @@ namespace GuessingGame
             app.UseStaticFiles();
 
             app.UseRouting();
+
+            using (var scope =
+                    app.ApplicationServices.CreateScope())
+                    using (var context = scope.ServiceProvider.GetService<GuessGameDbContext>())
+                        context.Database.EnsureCreated();
 
             app.UseSession();
 

@@ -25,6 +25,11 @@ namespace GuessingGame.Pages
 
             var gameSession = HttpContext.Session.Get<GameSession>("_GameSession");
 
+            if (input.Length != GameSession.NumberSize)
+            {
+                return new JsonResult(false) { StatusCode = 400, };
+            }
+
             if (input != null && gameSession.TriesLeft > 0 && gameSession.PlayerWon == false)
             {
                 gameSession.PlayerInputs.Add(input);
