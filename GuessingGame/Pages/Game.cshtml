@@ -8,46 +8,43 @@
 }
 
 <div class="text-center">
-    <h2>Hello @Model.GetGameSession().PlayerName;</h2>
-    <h3>Genereated number - @Model.GetGameSession().NumberToGuess</h3>
+    <h2>Hello, @Model.GetGameSession().PlayerName!</h2>
 </div>
+<div style="width: 70%; margin: 0 auto; position: relative;">
+    <div class="centered-inner-div mt-5">
 
-<div class="centered-inner-div mt-5">
-
-    <div class="d-flex centered-inner-div">
-        <div class="d-inline-block">
-            <form>
+        <div class="d-flex centered-inner-div">
+            <div class="d-inline-block">
+                <span id="input-error-field" style="position:relative; bottom: 20px; right:40px; color:red;"></span>
                 <div class="form-group row">
                     <input type="number" class="form-control col-2 text-center inputs" min="1" max="9" id="num1" name="num1" />
                     <input type="number" class="form-control col-2 text-center inputs" min="0" max="9" id="num2" name="num2" />
                     <input type="number" class="form-control col-2 text-center inputs" min="0" max="9" id="num3" name="num3" />
                     <input type="number" class="form-control col-2 text-center inputs" min="0" max="9" id="num4" name="num4" />
                 </div>
-                <span id="input-error-field" style="position:relative; bottom: 20px; right:40px; color:red;"></span>
-            </form>
-            <div>
                 <div>
-                    <button class="btn btn-info" onclick="GetInput()">Try guess</button>
+                    <div class="centered-inner-div">
+                        <button class="btn btn-info" onclick="GetInput()">Try guess</button>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="d-inline-block">
-            <h3>Your inputs:</h3>
-            <div id="input-history" class="border">
-                @{
-                    var gameSession = Model.GetGameSession();
-                    for (int i = 0; i < gameSession.PlayerInputs.Count; i++)
-                    {
-                        <span class="pt-3 pl-3">@gameSession.PlayerInputs[i]</span>
-                        <span class="pt-3 pl-3"><strong>M:</strong>@gameSession.GuessResults[i].CorrectMatches <strong>P:</strong>@gameSession.GuessResults[i].CorrectPositions</span><br>
+            <div class="d-inline-block">
+                <h5 class="text-center">Your inputs:</h5>
+                <div id="input-history" class="border">
+                    @{
+                        var gameSession = Model.GetGameSession();
+                        for (int i = 0; i < gameSession.PlayerInputs.Count; i++)
+                        {
+                            <span class="pt-3 pl-2">@gameSession.PlayerInputs[i]</span>
+                            <span class="pt-3 pl-3 pr-2"><strong>M:</strong>@gameSession.GuessResults[i].CorrectMatches <strong>P:</strong>@gameSession.GuessResults[i].CorrectPositions</span><br>
+                        }
                     }
-                }
 
+                </div>
+                <h6 id="tries-left" class="text-center">Tries left: @Model.GetGameSession().TriesLeft</h6>
             </div>
-            <h4 id="tries-left">Tries left: @Model.GetGameSession().TriesLeft</h4>
         </div>
     </div>
-
 </div>
 
 <script>
@@ -98,7 +95,7 @@
 
         var input = num1 + num2 + num3 + num4;
         if (containsUnique(input) === false) {
-            document.getElementById("input-error-field").innerHTML = "Error. Input unique number in each field";
+            document.getElementById("input-error-field").innerHTML = "Input unique number in each field";
             return
         }
 
@@ -124,9 +121,13 @@
                 else
                 {
                     $("#tries-left").text("Tries left: " + result.triesLeft);
-                    $("#input-history").append("<span class=\"pt-3 pl-3\">" + result.lastMove + "</span>");
-                    $("#input-history").append("<span class=\"pt-3 pl-3\"> <strong>M:</strong>" + result.lastGuessResult.correctMatches);
-                    $('#input-history').append(" <strong>P:</strong>" + result.lastGuessResult.correctPositions + "</span><br>");
+                    $("#input-history").append("<span class=\"pt-3 pl-2\">" + result.lastMove + "</span>");
+                    $("#input-history").append(
+                        "<span class=\"pt-3 pl-3 pr-2\"> <strong>M:</strong>"
+                        + result.lastGuessResult.correctMatches +
+                        " <strong>P:</strong>"
+                        + result.lastGuessResult.correctPositions
+                        + "</span><br>");
                 }
             },
             error: function (error) {

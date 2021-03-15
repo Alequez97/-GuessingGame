@@ -6,13 +6,22 @@
 
 <div class="text-center">
     <h1 class="display-4">Guessing game</h1>
+    <h3>Game rules:</h3>
+
+
+    <p>Program chooses a random secret number with 4 digits. All digits in the secret number are different.</p>
+    <p>You have 8 tries to guess the secret number. After each guess will be displayed the message "M:m; P:p" where:
+    m - number of matching digits but not on the right places and
+    p - number of matching digits on exact places</p>
+    <p>Game ends after 8 tries or if the correct number is guessed.</p>
+    
 
     <div class="container col-6">
 
         <form method="get" action="/game">
 
             <div class="container">
-                <input type="text" class="form-control mt-3" name="name" id="name" placeholder="Name" required>
+                <input type="text" class="form-control mt-3 text-center" name="name" id="name" placeholder="Name" required>
                 <input type="submit" class="btn btn-info mt-3 pt-2 pb-2 pl-5 pr-5" value="Start game" /><br>
                 <a href="/leaderboards" class="btn btn-secondary m-2">Leaderboards</a><br>
             </div>
