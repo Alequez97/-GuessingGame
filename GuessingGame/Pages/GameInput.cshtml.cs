@@ -25,7 +25,7 @@ namespace GuessingGame.Pages
 
             var gameSession = HttpContext.Session.Get<GameSession>("_GameSession");
 
-            if (input != null && gameSession.TriesLeft > 0 && gameSession.PlayerWon == false)
+            if (input != null && gameSession.TriesLeft > 0 && gameSession.PlayerWon == false)    //if input is empty or game was over don't accept inputs
             {
                 if (input.Length != GameSession.NumberSize)
                 {

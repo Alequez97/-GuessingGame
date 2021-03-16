@@ -19,14 +19,15 @@ namespace GuessingGame.Pages
         }
 
         public List<UserStatsModel> LeaderboardRecordsList { get; set; }
+        private List<GameResult> GameResults { get; set; }
 
         public void OnGet()
         {
-            var gameResults = dbContext.GameResults.ToList();
-            LeaderboardRecordsList = ParseDatabaseRecords(gameResults, 0);
+            GameResults = dbContext.GameResults.ToList();
+            LeaderboardRecordsList = ParseDatabaseRecords(GameResults, 0);
         }
 
-        public IActionResult OnGetUpdate(string minGames)
+        public IActionResult OnGetUpdate(string minGames)   //called when user inputs minimal games count
         {
             int minGamesCount;
             try 
@@ -37,8 +38,7 @@ namespace GuessingGame.Pages
             {
                 minGamesCount = 0;
             }
-            var gameResults = dbContext.GameResults.ToList();
-            LeaderboardRecordsList = ParseDatabaseRecords(gameResults, minGamesCount);
+            LeaderboardRecordsList = ParseDatabaseRecords(GameResults, minGamesCount);
             return new JsonResult(LeaderboardRecordsList);
 
         }
@@ -95,16 +95,16 @@ namespace GuessingGame.Pages
                 for (int j = 0; j < leaderboardsDictionary.Count; j++)
                 {
                     var record = leaderboardsDictionary.ElementAt(j);
-                    if (record.Value.PrecentOfWinnigGames > currentWinRate)
+                    if (record.Value.PrecentOfWinnigGames > currentWinRate)     //getting user with best winning rate
                     {
                         currentUsername = record.Key;
                         currentWinRate = record.Value.PrecentOfWinnigGames;
                         currentTryRate = record.Value.AverageTryCount;
                         index = j;
                     }
-                    else if (record.Value.PrecentOfWinnigGames == currentWinRate)
+                    else if (record.Value.PrecentOfWinnigGames == currentWinRate)       //if some user has same win rate, than check average tries count
                     {
-                        if (record.Value.AverageTryCount < currentTryRate)
+                        if (record.Value.AverageTryCount < currentTryRate)              //add user with less average tries count per game
                         {
                             currentUsername = record.Key;
                             currentWinRate = record.Value.PrecentOfWinnigGames;

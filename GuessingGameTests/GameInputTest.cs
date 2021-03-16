@@ -31,6 +31,8 @@ namespace GuessingGameTests
             string input = "";
             var result = gameInputTestPage.OnGet(input);
             Assert.AreEqual(mockGameSession.TriesLeft, GameSession.TriesAtStart);
+            Assert.AreEqual(0, mockGameSession.PlayerInputs.Count);
+            Assert.AreEqual(0, mockGameSession.GuessResults.Count);
         }
 
         [Test]
@@ -39,6 +41,8 @@ namespace GuessingGameTests
             string input = "321";
             var result = gameInputTestPage.OnGet(input);
             Assert.AreEqual(mockGameSession.TriesLeft, GameSession.TriesAtStart);
+            Assert.AreEqual(0, mockGameSession.PlayerInputs.Count);
+            Assert.AreEqual(0, mockGameSession.GuessResults.Count);
         }
 
         [Test]
@@ -75,6 +79,12 @@ namespace GuessingGameTests
             Assert.AreEqual(0, lastTryResult.CorrectMatches);
             Assert.AreEqual(true, mockGameSession.PlayerWon);
 
+            input = "4321";
+            result = gameInputTestPage.OnGet(input);
+
+            Assert.AreEqual(1, mockGameSession.GuessResults.Count);
+            Assert.AreEqual(1, mockGameSession.PlayerInputs.Count);
+            Assert.AreEqual(true, mockGameSession.PlayerWon);
         }
     }
 }
