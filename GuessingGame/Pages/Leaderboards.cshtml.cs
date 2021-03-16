@@ -29,6 +29,7 @@ namespace GuessingGame.Pages
 
         public IActionResult OnGetUpdate(string minGames)   //called when user inputs minimal games count
         {
+            if (GameResults == null) GameResults = dbContext.GameResults.ToList();
             int minGamesCount;
             try 
             {
