@@ -18,9 +18,8 @@ namespace GuessingGame.Pages
         private readonly string gameSessionName = "_GameSession";
 
 
-        public void OnGet()
+        public void OnGet(string name)
         {
-            string name = Request.Query["name"].ToString();
             string number = NumberGenerator.GenerateNumber(GameSession.NumberSize);
 
             var gameSession = GetGameSession();     //create new GameSession instance if page is loaded first time or is entered different name

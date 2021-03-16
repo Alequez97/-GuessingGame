@@ -22,7 +22,6 @@ namespace GuessingGame.Pages
 
         public void OnGet()
         {
-            dbContext.Database.EnsureCreated();
             var gameResults = dbContext.GameResults.ToList();
             LeaderboardRecordsList = ParseDatabaseRecords(gameResults, 0);
         }
