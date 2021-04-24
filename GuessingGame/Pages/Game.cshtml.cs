@@ -12,7 +12,7 @@ using System.Net.Http;
 
 namespace GuessingGame.Pages
 {
-    public class GameModel : PageModel
+    public class GameModel2 : PageModel
     {
 
         private readonly string gameSessionName = "_GameSession";
@@ -35,7 +35,7 @@ namespace GuessingGame.Pages
                 }
                 else
                 {
-                    if (gameSession.PlayerWon == true || gameSession.TriesLeft == 0)        //if player guessed number or won used all tries, reset game
+                    if (gameSession.PlayerWon == true || gameSession.TriesLeft == 0)        //if player guessed number or player used all tries, reset game
                     {
                         gameSession.Reset();
                         HttpContext.Session.Set<GameSession>(gameSessionName, gameSession);

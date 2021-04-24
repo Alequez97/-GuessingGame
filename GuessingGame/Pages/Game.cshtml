@@ -1,6 +1,6 @@
 ﻿@page
 
-@model GuessingGame.Pages.GameModel
+@model GuessingGame.Pages.GameModel2
 @using Microsoft.AspNetCore.Http;
 @inject Microsoft.AspNetCore.Antiforgery.IAntiforgery antiforgery
 @{
@@ -8,41 +8,42 @@
 }
 
 <div class="text-center">
-    <h2>Hello, @Model.GetGameSession().PlayerName!</h2>
+    <h1>Hello, @Model.GetGameSession().PlayerName!</h1>
 </div>
-<div style="width: 70%; margin: 0 auto; position: relative;">
-    <div class="centered-inner-div mt-5">
+<div class="main-container">
 
-        <div class="d-flex centered-inner-div">
-            <div class="d-inline-block">
-                <span id="input-error-field" style="position:relative; bottom: 20px; right:40px; color:red;"></span>
-                <div class="form-group row">
-                    <input type="number" class="form-control col-2 text-center inputs" min="1" max="9" id="num1" name="num1" />
-                    <input type="number" class="form-control col-2 text-center inputs" min="0" max="9" id="num2" name="num2" />
-                    <input type="number" class="form-control col-2 text-center inputs" min="0" max="9" id="num3" name="num3" />
-                    <input type="number" class="form-control col-2 text-center inputs" min="0" max="9" id="num4" name="num4" />
-                </div>
-                <div>
-                    <div class="centered-inner-div">
-                        <button class="btn btn-info" onclick="GetInput()">Try guess</button>
+    <div class="input-wrapper">
+        <div id="input-error-wrapper">
+            <p id="input-error-field"></p>
+        </div>
+        <div class="inputs">
+            <input type="number" class="input-field inputs" min="1" max="9" id="num1" name="num1">
+            <input type="number" class="input-field inputs" min="1" max="9" id="num2" name="num2">
+            <input type="number" class="input-field inputs" min="1" max="9" id="num3" name="num3">
+            <input type="number" class="input-field inputs" min="1" max="9" id="num4" name="num4">
+        </div>
+        <div class="guess-button-wrapper">
+            <span class="guess-button" onclick="GetInput()">Try guess</span>
+        </div>
+    </div>
+
+    <div class="input-logs-wrapper">
+        <div class="input-logs-header">
+            <h3>Input logs:</h3>
+        </div>
+        <div class="input-logs" id="input-logs">
+            @{
+                var gameSession = Model.GetGameSession();
+                for (int i = 0; i < gameSession.PlayerInputs.Count; i++)
+                {
+                    <div class="input-line">
+                        <strong>M:</strong>@gameSession.GuessResults[i].CorrectMatches <strong>P:</strong>@gameSession.GuessResults[i].CorrectPositions @gameSession.PlayerInputs[i]
                     </div>
-                </div>
-            </div>
-            <div class="d-inline-block">
-                <h5 class="text-center">Your inputs:</h5>
-                <div id="input-history" class="border">
-                    @{
-                        var gameSession = Model.GetGameSession();
-                        for (int i = 0; i < gameSession.PlayerInputs.Count; i++)
-                        {
-                            <span class="pt-3 pl-2">@gameSession.PlayerInputs[i]</span>
-                            <span class="pt-3 pl-3 pr-2"><strong>M:</strong>@gameSession.GuessResults[i].CorrectMatches <strong>P:</strong>@gameSession.GuessResults[i].CorrectPositions</span><br>
-                        }
-                    }
-
-                </div>
-                <h6 id="tries-left" class="text-center">Tries left: @Model.GetGameSession().TriesLeft</h6>
-            </div>
+                }
+            }
+        </div>
+        <div class="input-logs-footer">
+            <h4 id="tries-left" class="text-center">Tries left: @Model.GetGameSession().TriesLeft</h4>
         </div>
     </div>
 </div>
@@ -50,13 +51,16 @@
 <script>
 
     $(document).ready(function () {
-        $(".inputs").keyup(function () {
+        var inputs = document.getElementsByClassName("input-field");
+        inputs[0].focus();
+
+        $(".input-field").keyup(function () {
             if ($(this).val() !== "") {
-                $(this).next(".inputs").focus();
+                $(this).next(".input-field").focus();
             }
         });
 
-        var inputs = document.getElementsByClassName("inputs");
+        var inputs = document.getElementsByClassName("input-field");
         for (var i = 0; i < inputs.length; i++) {
             inputs[i].addEventListener('keydown', (e) =>
             {
@@ -82,8 +86,6 @@
 
     function GetInput() {
         document.getElementById("input-error-field").innerHTML = "";
-
-
 
         var num1 = document.getElementById("num1").value;
         var num2 = document.getElementById("num2").value;
@@ -121,13 +123,12 @@
                 else
                 {
                     $("#tries-left").text("Tries left: " + result.triesLeft);
-                    $("#input-history").append("<span class=\"pt-3 pl-2\">" + result.lastMove + "</span>");
-                    $("#input-history").append(
-                        "<span class=\"pt-3 pl-3 pr-2\"> <strong>M:</strong>"
+                    $("#input-logs").append(
+                        "<div class=\"input-line\"> <strong>M:</strong>"
                         + result.lastGuessResult.correctMatches +
                         " <strong>P:</strong>"
                         + result.lastGuessResult.correctPositions
-                        + "</span><br>");
+                        + " " + result.lastMove + "</div>");
                 }
             },
             error: function (error) {
@@ -140,7 +141,7 @@
     }
 
     function ClearInputs() {
-        var inputs = document.getElementsByClassName("inputs");
+        var inputs = document.getElementsByClassName("input-field");
         for (var i = 0; i < inputs.length; i++) {
             inputs[i].value = "";
         }

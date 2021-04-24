@@ -38,4 +38,12 @@
             }
         }
     }
+<div style="position: relative; bottom: 200px; left: 700px; width: 200px;">
+    @for (int i = 0; i < gameSession.UsedTries; i++)
+    {
+        <p>@gameSession.PlayerInputs[i] - <strong>M:</strong>@gameSession.GuessResults[i].CorrectMatches; <strong>P:</strong>@gameSession.GuessResults[i].CorrectPositions</p>
+    }
+
+</div>
+   
 </div>
